@@ -12,24 +12,20 @@ public class NBody {
 
     public static Planet[] readPlanets(String file){
         In in = new In(file);
-        Planet[] allPlanets = new Planet[5];
-
-        /* Skip the first two lines */
-        in.readLine();
-        in.readLine();
-
-        for(int i=0; i<5; i++) {
+        int num = in.readInt();
+        Planet[] planets = new Planet[num];
+        in.readDouble();
+        for (int i = 0; i < num; i++) {
             double xxPos = in.readDouble();
             double yyPos = in.readDouble();
             double xxVel = in.readDouble();
             double yyVel = in.readDouble();
             double mass = in.readDouble();
             String imgFileName = in.readString();
-            allPlanets[i] = new Planet(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
+            Planet planet = new Planet(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
+            planets[i] = planet;
         }
-        return allPlanets;
-
-        
+        return planets;
     }
 
     public static void main(String[] args) {
