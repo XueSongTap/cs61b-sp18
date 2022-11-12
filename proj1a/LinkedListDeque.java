@@ -1,4 +1,3 @@
-import java.util.Iterator;
 
 public class LinkedListDeque<T> {
 
@@ -93,21 +92,22 @@ public class LinkedListDeque<T> {
     public T get(int index){
 
 
-        if (index < size) return null;
+        if (size < index) return null;
         Node curr =  sentinel.next;
-        for (int i = 0; i < index; i ++){
+        while (index > 0){
             curr = curr.next;
+            index --;
         }
-
         return curr.item;
+
     }
     public T getRecursive(int index){
-        if (index < size) return null;
+        if (size < index) return null;
 
         return getRecursive(sentinel.next, index);
     }
 
-    public T getRecursive(LinkedListDeque<T>.Node node, int i){
+    private T getRecursive(LinkedListDeque<T>.Node node, int i){
         if (i == 0) return node.item;
         else return getRecursive(node.next, i --);
     }
