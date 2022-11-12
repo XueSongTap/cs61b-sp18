@@ -5,11 +5,11 @@ public class ArrayDeque<T> {
 
     private int capacity = 8, left, right;
 
-    public ArrayDeque(){
+    public ArrayDeque() {
         items = (T[]) new Object[capacity];
         left = right =0;
     }
-    public void addFirst(T item){
+    public void addFirst(T item) {
 
         if (isFull()){
             resize((int)(capacity * 1.5));
