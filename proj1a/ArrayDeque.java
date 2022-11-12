@@ -1,13 +1,11 @@
 public class ArrayDeque<T> {
 
     private T[] items;
-
-
-    private int capacity = 8, left, right;
-
+    private int size, left, right;
+    private final int INITIAL_CAPACITY = 8;
     public ArrayDeque() {
-        items = (T[]) new Object[capacity];
-        left = right =0;
+        items = (T[]) new Object[INITIAL_CAPACITY];
+        left = right = size = 0;
     }
     public void addFirst(T item) {
 
@@ -28,15 +26,12 @@ public class ArrayDeque<T> {
         items[right] = item;
 
     }
-
     public boolean isEmpty(){
-        return left == right;
+        return size == 0;
 
     }
-
-
     public int size(){
-        return (right - left + capacity) % capacity;
+        return size;
     }
 
     public void printDeque(){
