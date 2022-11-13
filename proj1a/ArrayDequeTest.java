@@ -1,18 +1,17 @@
-/** Performs some basic linked list tests. */
 public class ArrayDequeTest {
-	/* Utility method for printing out empty checks. */
 	public static boolean checkEmpty(boolean expected, boolean actual) {
 		if (expected != actual) {
-			System.out.println("isEmpty() returned " + actual + ", but expected: " + expected);
+			System.out.println("isEmpty() returned " + actual
+					+ ", but expected: " + expected);
 			return false;
 		}
 		return true;
 	}
 
-	/* Utility method for printing out empty checks. */
 	public static boolean checkSize(int expected, int actual) {
 		if (expected != actual) {
-			System.out.println("size() returned " + actual + ", but expected: " + expected);
+			System.out.println("size() returned " + actual +
+					", but expected: " + expected);
 			return false;
 		}
 		return true;
@@ -34,7 +33,6 @@ public class ArrayDequeTest {
 	  * && is the "and" operation. */
 	public static void addIsEmptySizeTest() {
 		System.out.println("Running add/isEmpty/Size test.");
-//		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 		ArrayDeque<String> arrd1 = new ArrayDeque<String>();
 
 		boolean passed = checkEmpty(true, arrd1.isEmpty());
@@ -42,7 +40,6 @@ public class ArrayDequeTest {
 		arrd1.addFirst("front");
 		
 		// The && operator is the same as "and" in Python.
-		// It's a binary operator that returns true if both arguments true, and false otherwise.
 		passed = checkSize(1, arrd1.size()) && passed;
 		passed = checkEmpty(false, arrd1.isEmpty()) && passed;
 
@@ -64,7 +61,6 @@ public class ArrayDequeTest {
 
 		System.out.println("Running add/remove test.");
 
-//		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 		ArrayDeque<Integer> arrd1 = new ArrayDeque<Integer>();
 		// should be empty
 		boolean passed = checkEmpty(true, arrd1.isEmpty());
