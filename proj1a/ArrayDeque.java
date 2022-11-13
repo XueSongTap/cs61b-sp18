@@ -1,121 +1,126 @@
 public class ArrayDeque<T> {
-
     private T[] items;
-    private int size, left, right;
-    private final int INITIAL_CAPACITY = 8;
+    private final int INIT_CAPACITY = 8;
+    private int nextFirst;
+    private int nextLast;
+    private int size;
+
     public ArrayDeque() {
-        items = (T[]) new Object[INITIAL_CAPACITY];
-        left = right = size = 0;
-    }
-    public void addFirst(T item) {
-
-        if (isFull()){
-            resize((int)(capacity * 1.5));
-        }
-
-        left = (left - 1 + capacity) % capacity;
-        items[left] = item;
+        items = (T[]) new Object[INIT_CAPACITY];
+        size = 0;
+        nextFirst = 0;
+        nextLast = 1;
     }
 
-    public void addLast(T item){
-        if (isFull()){
-            resize((int)(capacity * 1.5));
-        }
-
-        right = (right + 1 + capacity) % capacity;
-        items[right] = item;
-
-    }
-    public boolean isEmpty(){
-        return size == 0;
-
-    }
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public void printDeque(){
-        if (left < right){
-            for (int i = left; i < right; i ++){
-                if (i == right -1){
-                    System.out.println(items[i]);
-                    break;
-                }
-
-                System.out.print(items[i] + " ");
-            }
-        }else if (left > right){
-            for (int i = left; i < capacity; i ++){
-                System.out.println(items[i] +  " ");
-            }
-
-            for (int i = 0; i < right; i ++){
-                if (i == right -1){
-                    System.out.println(items[i]);
-                    break;
-                }
-                System.out.println(items[i] + " ");
-            }
-        }
+    public boolean isEmpty() {
+        return size == 0;
     }
 
-    public T removeFirst(){
-        if (isEmpty()){
+    private int minusOne(int index) {
+        return Math.floorMod(index - 1, items.length);
+    }
+
+    private int plusOne(int index) {
+        return Math.floorMod(index + 1, items.length);
+    }
+
+    private int plusOne(int index, int length) {
+        return Math.floorMod(index + 1, length);
+    }
+
+    public void addFirst(T item) {
+        resize();
+        items[nextFirst] = item;
+        size++;
+        nextFirst = minusOne(nextLast);
+    }
+
+    private T getFirst() {
+        return items[plusOne(nextFirst)];
+    }
+
+    public T removeFirs() {
+        if (isEmpty()) {
             return null;
         }
-
-        T res = items[left];
-        left = (left + 1) % capacity;
-        if (isLowUsageRate()){
-            resize((int)(capacity * 0.5));
-        }
-
-        return res;
+        resize();
+        T removedItem = getFirst();
+        nextFirst = plusOne(nextFirst);
+        items[nextFirst] = null;
+        size--;
+        return removedItem;
     }
 
-    public T removeLast(){
-        if (isEmpty()) return null;
-        T res = items[right];
-        right = (right -1) % capacity;
-        if (isLowUsageRate()){
-            resize((int)(capacity * 0.5));
-        }
-        return res;
+    public void addLast(T item) {
+        resize();
+        items[nextLast] = item;
+        size++;
+        nextLast = plusOne(nextLast);
     }
 
-    public T get(int index){
+    private T getLast() {
+        return items[minusOne(nextLast)];
+    }
+
+    public T removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
+        resize();
+        T removedItem = getLast();
+        nextLast = minusOne(nextLast);
+        items[nextLast] = null;
+        size--;
+        return removedItem;
+    }
+
+    public void printDeque() {
+        for (int index = plusOne(nextFirst); index != nextLast; index = plusOne(index)) {
+            System.out.print(items[index] + " ");
+        }
+        System.out.println();
+    }
+
+    public T get(int index) {
+        if (index < 0 || index >= size || isEmpty()) {
+            return null;
+        }
+        index = Math.floorMod(plusOne(nextFirst) + index, items.length);
         return items[index];
     }
 
-    private boolean isFull(){
-        return size() == (capacity -1);
-    }
-
-    private boolean isLowUsageRate(){
-        return capacity >= 16 && size() / (double) capacity < 0.25;
-    }
-
-    private void resize(int newSize){
-        T[] newArr = (T[]) new Object[newSize];
-
-        int size = size();
-        if (left < right){
-            for (int i = left, j = 0; i < right && j < size; i ++, j ++){
-                newArr[j] = items[i];
-            }
-        }else if (left > right){
-            int j = 0;
-            for (int i = left; j < capacity - left; i ++, j ++){
-                newArr[j] = items[i];
-            }
-
-            for (int i = 0; j < size; i ++, j ++){
-                newArr[j] = items[i];
-            }
+    private void resize() {
+        if (size == items.length) {
+            expand();
         }
-        left = 0;
-        right = size;
-        items = newArr;
-        capacity = newSize;
+        if (size < (items.length) * 0.25 && items.length > 8) {
+            reduce();
+        }
+    }
+
+    private void expand() {
+        resizeHelper(items.length * 2);
+    }
+
+    private void reduce() {
+        resizeHelper(items.length / 2);
+    }
+
+    private void resizeHelper(int capacity) {
+        T[] tempArr = items;
+        int begin = plusOne(nextFirst);
+        int end = minusOne(nextLast);
+        items = (T[]) new Object[capacity];
+        nextFirst = 0;
+        nextLast = 1;
+        for (int i = begin; i != end; i = plusOne(i, tempArr.length)) {
+            items[nextLast] = tempArr[i];
+            nextLast = plusOne(nextLast);
+        }
+        items[nextLast] = tempArr[end];
     }
 }
