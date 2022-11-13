@@ -5,7 +5,6 @@ public class Palindrome {
         for (int i = 0; i < n; i++) {
             wordDeque.addLast(word.charAt(i));
         }
-
         return wordDeque;
     }
     public boolean isPalindrome(String word) {
