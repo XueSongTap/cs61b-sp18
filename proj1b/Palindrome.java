@@ -9,13 +9,19 @@ public class Palindrome {
     }
     public boolean isPalindrome(String word) {
         Deque d = wordToDeque(word);
-        while (d.size() > 0) {
-            if (d.removeLast() != d.removeFirst()) {
-                return false;
-            }
-        }
-        return true;
+        return isPalindromeHelper(d);
     }
+
+    private boolean isPalindromeHelper(Deque d) {
+        if (d.size() <= 1) {
+            return true;
+        } else if (d.removeLast() != d.removeLast()) {
+            return false;
+        } else {
+            return isPalindromeHelper(d);
+        }
+    }
+
     public boolean isPalindrome(String word, CharacterComparator cc) {
         Deque d = wordToDeque(word);
         return isPalindromeHelper(d, cc);
@@ -24,7 +30,7 @@ public class Palindrome {
     private boolean isPalindromeHelper(Deque d, CharacterComparator cc) {
         if (d.size() <= 1) {
             return true;
-        } else if (!cc.equalChars((char) d.removeFirst(), (char) d.removeLast())) {
+        } else if (!cc.equalChars((char)d.removeFirst(), (char)d.removeLast())) {
             return false;
         } else {
             return isPalindromeHelper(d, cc);
