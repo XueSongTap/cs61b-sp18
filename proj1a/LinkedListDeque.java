@@ -30,6 +30,6 @@ public class LinkedListDeque {
     }
 
     public T get(int index){
-        
+
     }
 }
